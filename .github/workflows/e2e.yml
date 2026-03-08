@@ -1,0 +1,108 @@
+name: E2E Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  e2e-tests:
+    name: E2E Tests with Bruno
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout example service
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, curl, json
+
+      - name: Install dependencies
+        run: composer install --no-interaction --no-progress
+
+      - name: Enable Oicana extension
+        run: |
+          echo "PHP_INI_SCAN_DIR=:$(pwd)/vendor/oicana/installer/php" >> $GITHUB_ENV
+          PHP_INI_SCAN_DIR=":$(pwd)/vendor/oicana/installer/php" php -m | grep oicana || (echo "Oicana extension not loaded" && exit 1)
+
+      - name: Start service in background
+        run: |
+          php -S 127.0.0.1:3004 -t public > server.log 2>&1 &
+          echo $! > service.pid
+          echo "Service started with PID $(cat service.pid)"
+
+      - name: Checkout oicana repository (for Bruno tests)
+        uses: actions/checkout@v4
+        with:
+          repository: oicana/oicana
+          path: oicana
+
+      - name: Setup Node.js for Bruno CLI
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Bruno CLI
+        run: npm install -g @usebruno/cli
+
+      - name: Wait for service to be ready
+        run: |
+          echo "Waiting for service on port 3004..."
+          timeout=60
+          elapsed=0
+          while ! curl -f http://localhost:3004/templates 2>/dev/null; do
+            if [ $elapsed -ge $timeout ]; then
+              echo "Service did not start within ${timeout} seconds"
+              if [ -f service.pid ]; then
+                echo "Service PID: $(cat service.pid)"
+                ps aux | grep $(cat service.pid) || echo "Service process not found"
+              fi
+              if [ -f server.log ]; then
+                echo "=== Server log ==="
+                cat server.log
+              fi
+              exit 1
+            fi
+            echo "Waiting... (${elapsed}s/${timeout}s)"
+            sleep 2
+            elapsed=$((elapsed + 2))
+          done
+          echo "Service is ready!"
+
+      - name: Run Bruno E2E tests
+        working-directory: oicana/e2e-tests/bruno
+        run: bru run --env slim --sandbox developer --reporter-html results.html
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: oicana/e2e-tests/bruno/results.html
+          retention-days: 30
+
+      - name: Upload server logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: server-logs
+          path: server.log
+          retention-days: 7
+
+      - name: Stop service
+        if: always()
+        run: |
+          if [ -f service.pid ]; then
+            PID=$(cat service.pid)
+            echo "Stopping service with PID $PID"
+            kill $PID || true
+            # Wait for graceful shutdown
+            sleep 5
+            # Force kill if still running
+            kill -9 $PID 2>/dev/null || true
+          fi
