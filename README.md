@@ -30,7 +30,7 @@ The service uses [RoadRunner](https://roadrunner.dev/) as a long-running PHP app
 
 The code of this example project is licensed under the [MIT license](LICENSE).
 
-But please be aware, that the dependency `oicana` [is licensed under PolyForm Noncommercial License 1.0.0][oicana-license] and requires a commercial License for use cases that are not covered by the PolyForm License. Visit [the Oicana website][oicana-website] for pricing options.
+But please be aware, that the Oicana dependency [is licensed under PolyForm Noncommercial License 1.0.0][oicana-license] and requires a commercial License for use cases that are not covered by the PolyForm License. Visit [the Oicana website][oicana-website] for pricing options.
 
 
 [oicana-license]: https://github.com/oicana/oicana?tab=readme-ov-file#licensing
