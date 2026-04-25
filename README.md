@@ -7,8 +7,8 @@ Small example PHP web service that uses Oicana for PDF templating.
 1. Install dependencies: `composer install`
 2. Follow the Oicana installer output to enable the native extension:
    - The installer will attempt to download the extension automatically
-   - You need to enable it in your php.ini: `extension=oicana`
-   - Verify it's loaded: `php -m | grep oicana`
+   - You need to extend the value of `PHP_INI_SCAN_DIR` as shown in the installer output
+   - Verify the extenaion is loaded: `php -m | grep oicana`
 3. [Download the RoadRunner binary](https://docs.roadrunner.dev/docs/general/install) and place it in your `PATH` (or in the project root)
 4. Start the service: `rr serve`
 5. Visit http://127.0.0.1:3004 for the **Swagger UI documentation**
@@ -30,7 +30,8 @@ The service uses [RoadRunner](https://roadrunner.dev/) as a long-running PHP app
 
 The code of this example project is licensed under the [MIT license](LICENSE).
 
-But please be aware, that the dependency `oicana` [is licensed under PolyForm Noncommercial License 1.0.0][oicana-license].
+But please be aware, that the dependency `oicana` [is licensed under PolyForm Noncommercial License 1.0.0][oicana-license] and requires a commercial License for use cases that are not covered by the PolyForm License. Visit [the Oicana website][oicana-website] for pricing options.
 
 
 [oicana-license]: https://github.com/oicana/oicana?tab=readme-ov-file#licensing
+[oicana-website]: https://oicana.com
