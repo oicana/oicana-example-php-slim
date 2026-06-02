@@ -17,7 +17,7 @@ use OpenApi\Attributes as OA;
 )]
 #[OA\ExternalDocumentation(
     description: 'General documentation for Oicana',
-    url: 'https://docs.oicana.com'
+    url: 'https://oicana.com/docs/'
 )]
 #[OA\Tag(
     name: 'template',
