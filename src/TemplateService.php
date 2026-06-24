@@ -107,7 +107,7 @@ class TemplateService
         [$jsonInputs, $blobInputs] = $this->resolveInputs($body, $blobService);
 
         $start = hrtime(true);
-        $result = $template->compile(
+        $result = $template->export(
             jsonInputs: $jsonInputs,
             blobInputs: $blobInputs,
             exportFormat: ExportFormat::pdf(),
@@ -133,7 +133,7 @@ class TemplateService
         [$jsonInputs, $blobInputs] = $this->resolveInputs($body, $blobService);
 
         $start = hrtime(true);
-        $result = $template->compile(
+        $result = $template->export(
             jsonInputs: $jsonInputs,
             blobInputs: $blobInputs,
             exportFormat: ExportFormat::png(pixelsPerPt: 1.0),

@@ -28,7 +28,7 @@ class CertificateService
 
         try {
             $start = hrtime(true);
-            $result = $template->compile(
+            $result = $template->export(
                 jsonInputs: $jsonInputs,
                 exportFormat: ExportFormat::pdf(),
                 mode: CompilationMode::Production
