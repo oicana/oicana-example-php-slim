@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": "^8.3",
-        "oicana/oicana": "0.7.0-rc.1",
+        "oicana/oicana": "0.7.0",
         "slim/slim": "^4.14",
         "slim/psr7": "^1.7",
         "ramsey/uuid": "^4.7",
@@ -25,8 +25,6 @@
             "App\\": "src/"
         }
     },
-    "minimum-stability": "RC",
-    "prefer-stable": true,
     "config": {
         "allow-plugins": {
             "oicana/installer": true
