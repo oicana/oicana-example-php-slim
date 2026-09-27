@@ -6,6 +6,7 @@ namespace App;
 
 use Oicana\CompilationMode;
 use Oicana\ExportFormat;
+use Oicana\OicanaException;
 
 class CertificateService
 {
@@ -36,9 +37,9 @@ class CertificateService
             $elapsed = (hrtime(true) - $start) / 1_000_000;
             error_log(sprintf("Compiled 'certificate' to PDF in %.1fms", $elapsed));
             return $result;
-        } catch (\Exception $e) {
+        } catch (OicanaException $e) {
             error_log("Certificate template failed to compile: {$e->getMessage()}");
-            throw new \RuntimeException("Failed to compile certificate: {$e->getMessage()}", 0, $e);
+            throw $e;
         }
     }
 }

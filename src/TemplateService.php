@@ -54,7 +54,7 @@ class TemplateService
                 $elapsed = (hrtime(true) - $start) / 1_000_000;
                 $this->cache[$templateId] = $template;
                 error_log(sprintf("Warmed-up %s v%s in %.1fms", $templateId, $version, $elapsed));
-            } catch (\Exception $e) {
+            } catch (\RuntimeException $e) {
                 error_log("Failed to warm up template {$templateId} v{$version}: {$e->getMessage()}");
             }
         }
@@ -76,7 +76,7 @@ class TemplateService
             return false;
         }
 
-        $this->cache[$templateId]->cleanup();
+        $this->cache[$templateId]->close();
         unset($this->cache[$templateId]);
         error_log("Template '{$templateId}' removed from cache");
         return true;

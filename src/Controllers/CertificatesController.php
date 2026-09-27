@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controllers;
 
 use App\CertificateService;
+use Oicana\OicanaException;
 use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -64,7 +65,7 @@ class CertificatesController
             return $response
                 ->withHeader('Content-Type', 'application/pdf')
                 ->withHeader('Content-Disposition', 'attachment; filename="certificate.pdf"');
-        } catch (\Exception $e) {
+        } catch (OicanaException $e) {
             error_log("Failed to create certificate: {$e->getMessage()}");
             $response->getBody()->write(json_encode(['detail' => "Failed to compile certificate: {$e->getMessage()}"]));
             return $response->withStatus(400)->withHeader('Content-Type', 'application/json');

@@ -6,6 +6,7 @@ namespace App\Controllers;
 
 use App\BlobService;
 use App\TemplateService;
+use Oicana\OicanaException;
 use OpenApi\Attributes as OA;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -133,7 +134,7 @@ class TemplatesController
             $status = $this->templateService->getTemplate($templateId) === null ? 404 : 400;
             $response->getBody()->write(json_encode(['detail' => $e->getMessage()]));
             return $response->withStatus($status)->withHeader('Content-Type', 'application/json');
-        } catch (\Exception $e) {
+        } catch (OicanaException $e) {
             $response->getBody()->write(json_encode([
                 'detail' => "Template '{$templateId}' failed to compile with given inputs: {$e->getMessage()}"
             ]));
@@ -235,7 +236,7 @@ class TemplatesController
             $status = $this->templateService->getTemplate($templateId) === null ? 404 : 400;
             $response->getBody()->write(json_encode(['detail' => $e->getMessage()]));
             return $response->withStatus($status)->withHeader('Content-Type', 'application/json');
-        } catch (\Exception $e) {
+        } catch (OicanaException $e) {
             $response->getBody()->write(json_encode([
                 'detail' => "Template '{$templateId}' failed to compile: {$e->getMessage()}"
             ]));
