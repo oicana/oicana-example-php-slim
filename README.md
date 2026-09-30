@@ -8,7 +8,7 @@ Small example PHP web service that uses Oicana for PDF templating.
 2. Follow the Oicana installer output to enable the native extension:
    - The installer will attempt to download the extension automatically
    - You need to extend the value of `PHP_INI_SCAN_DIR` as shown in the installer output
-   - Verify the extenaion is loaded: `php -m | grep oicana`
+   - Verify the extension is loaded: `php -m | grep oicana`
 3. [Download the RoadRunner binary](https://docs.roadrunner.dev/docs/general/install) and place it in your `PATH` (or in the project root)
 4. Start the service: `rr serve`
 5. Visit http://127.0.0.1:3004 for the **Swagger UI documentation**
